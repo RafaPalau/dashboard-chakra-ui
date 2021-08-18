@@ -1,5 +1,5 @@
-import { Flex, Input, Icon } from "@chakra-ui/react";
-import { RiSearchLine } from "react-icons/ri";
+import { Flex, Input, Icon } from '@chakra-ui/react'
+import { RiSearchLine } from 'react-icons/ri'
 
 export function SearchBox() {
   return (
@@ -20,9 +20,9 @@ export function SearchBox() {
         color="gray.50"
         variant="unstyled"
         placeholder="Buscar na plataforma"
-        _placeholder={{ color: "gray.400" }}
+        _placeholder={{ color: 'gray.400' }}
       />
       <Icon as={RiSearchLine} fontSize="20" />
     </Flex>
-  );
+  )
 }
