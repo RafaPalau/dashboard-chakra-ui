@@ -13,46 +13,29 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
-} from '@chakra-ui/react'
-import Link from 'next/link'
-import { useEffect } from 'react'
-import { RiAddLine, RiPencilLine } from 'react-icons/ri'
-import { Header } from '../../components/Header'
-import { Pagination } from '../../components/Pagination'
-import { Sidebar } from '../../components/Sidebar'
-import { useQuery } from 'react-query'
-import { Spinner } from '@chakra-ui/spinner'
+} from "@chakra-ui/react";
+import Link from "next/link";
+import { useEffect } from "react";
+import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { Header } from "../../components/Header";
+import { Pagination } from "../../components/Pagination";
+import { Sidebar } from "../../components/Sidebar";
+import { Spinner } from "@chakra-ui/spinner";
+import { useUsers } from "../../services/hooks/useUsers";
 
 export default function Userlist() {
-  const { data, isLoading, error } = useQuery('users', async () => {
-    const response = await fetch('http://localhost:3000/api/users')
-    const data = await response.json()
-
-    const users = data.users.map((user) => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        created_at: new Date(user.created_at).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        }),
-      }
-    })
-    return users
-  })
+  const { data, isLoading, isFetching, error } = useUsers();
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
-  })
+  });
 
-  useEffect(() => {
-    fetch('http://localhost:3000/api/users')
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-  }, [])
+  // useEffect(() => {
+  //   fetch("http://localhost:3000/api/users")
+  //     .then((response) => response.json())
+  //     .then((data) => console.log(data));
+  // }, []);
 
   return (
     <Box>
@@ -64,6 +47,9 @@ export default function Userlist() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Usuários
+              {!isLoading && isFetching && (
+                <Spinner size="sm" color="gray.500" ml="4" />
+              )}
             </Heading>
 
             <Link href="/users/create" passHref>
@@ -92,7 +78,7 @@ export default function Userlist() {
               <Table colorScheme="whiteAlpha">
                 <Thead>
                   <Tr>
-                    <Th px={['4', '4', '6']} color="gray.300" width="8">
+                    <Th px={["4", "4", "6"]} color="gray.300" width="8">
                       <Checkbox colorScheme="pink" />
                     </Th>
                     <Th>Usuário</Th>
@@ -104,7 +90,7 @@ export default function Userlist() {
                   {data.map((user) => {
                     return (
                       <Tr key={user.id}>
-                        <Td px={['4', '4', '6']}>
+                        <Td px={["4", "4", "6"]}>
                           <Checkbox colorScheme="pink" />
                         </Td>
                         <Td>
@@ -122,11 +108,11 @@ export default function Userlist() {
                             colorScheme="purple"
                             leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
                           >
-                            {isWideVersion ? 'Editar' : ''}
+                            {isWideVersion ? "Editar" : ""}
                           </Button>
                         </Td>
                       </Tr>
-                    )
+                    );
                   })}
                 </Tbody>
               </Table>
@@ -137,5 +123,5 @@ export default function Userlist() {
         </Box>
       </Flex>
     </Box>
-  )
+  );
 }
